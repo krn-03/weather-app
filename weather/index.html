@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Weather App</h1>
+        </header>
+        <main>
+            <div class="weather-info">
+                <h2 id="city">City Name</h2>
+                <p id="temperature">Temperature: 25°C</p>
+                <p id="description">Description: Sunny</p>
+                <p id="humidity">Humidity: 60%</p>
+            </div>
+            <div class="search">
+                <input type="text" class="search-input" id="cityInput" value="New Delhi" placeholder="Enter city name">
+                <button id="search-button">Search</button>
+                <p id="error-message" class="error-message"></p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const searchButton = document.getElementById('search-button');
+        const searchInput = document.getElementById('cityInput');
+        const cityElement = document.getElementById('city');
+        const temperatureElement = document.getElementById('temperature');
+        const descriptionElement = document.getElementById('description');
+        const humidityElement = document.getElementById('humidity');
+        const errorMessageElement = document.getElementById('error-message');
+
+        searchButton.addEventListener('click', async () => {
+            const city = searchInput.value.trim();
+            if (city) {
+                try {
+                    const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=54bf69556e394ace92452245240912&q=${city}&aqi=no`);
+                    const data = await response.json();
+                    cityElement.textContent = data.location.name;
+                    temperatureElement.textContent = `Temperature: ${data.current.temp_c}°C`;
+                    descriptionElement.textContent = `Description: ${data.current.condition.text}`;
+                    humidityElement.textContent = `Humidity: ${data.current.humidity}%`;
+                    errorMessageElement.textContent = '';
+                } catch (error) {
+                    console.error(error);
+                    errorMessageElement.textContent = 'Error: Unable to fetch weather data';
+                }
+            } else {
+                errorMessageElement.textContent = 'Please enter a city name';
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+ 
